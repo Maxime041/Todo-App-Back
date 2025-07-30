@@ -12,6 +12,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
+    "eslint": "^9.32.0",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
     "mariadb": "^3.4.5",
@@ -19,6 +20,7 @@
     "sequelize": "^6.37.7"
   },
   "devDependencies": {
-    "jest": "^30.0.5"
+    "jest": "^30.0.5",
+    "prettier": "^3.6.2"
   }
 }
