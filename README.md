@@ -1,10 +1,11 @@
 # Todo API - Application de Gestion de Tâches
 
 ### Lien projet : https://github.com/users/Maxime041/projects/2
+### render.com : https://todo-app-back-p4tg.onrender.com 
 
 ## Description
 
-API REST dockerisée pour la gestion de tâches développée avec Node.js, Express et MariaDB. Cette application permet de créer, lire, modifier et supprimer des tâches via une interface REST.
+API REST dockerisée pour la gestion de tâches développée avec Node.js, Express et MongoDB. Cette application permet de créer, lire, modifier et supprimer des tâches via une interface REST.
 
 ## Objectifs
 
@@ -19,11 +20,11 @@ API REST dockerisée pour la gestion de tâches développée avec Node.js, Expre
 todo-api/
 ├── src/
 │   ├── config/
-│   │   └── database.js          # Configuration Sequelize/MariaDB
+│   │   └── database.js          # Configuration MongoDB
 │   ├── routes/
 │   │   └── tasks.js             # Routes API pour les tâches
 │   ├── models/
-│   │   └── task.js              # Modèle Sequelize pour Task
+│   │   └── task.js              # Modèle Mongoose pour Task
 │   ├── middleware/
 │   │   └── errorHandler.js      # Gestionnaire d'erreurs global
 │   └── app.js                   # Point d'entrée de l'application
@@ -82,9 +83,17 @@ todo-api/
 2. **Configurer les variables d'environnement**
    ```bash
    # Créer le fichier .env
+   echo "PORT=3003" > .env
+   echo "MONGODB_URI=mongodb://localhost:27017/todoapi" >> .env
    ```
 
-3. **Démarrer l'application**
+3. **Démarrer MongoDB localement**
+   ```bash
+   # Avec Docker
+   docker run -d -p 27017:27017 --name mongodb mongo:7
+   ```
+
+4. **Démarrer l'application**
    ```bash
    npm start
    ```
@@ -96,16 +105,15 @@ L'application utilise les variables d'environnement suivantes :
 | Variable | Description | Valeur par défaut |
 |----------|-------------|-------------------|
 | `NODE_ENV` | Environment d'exécution | `production` |
-| `DB_HOST` | Hôte de la base de données | `mariadb` |
-| `DB_NAME` | Nom de la base de données | `todo_app` |
-| `DB_USER` | Utilisateur de la base | `todo_user` |
-| `DB_PASSWORD` | Mot de passe de la base | `todo_password` |
+| `PORT` | Port du serveur | `3003` |
+| `MONGODB_URI` | URI de connexion MongoDB | `mongodb://localhost:27017/todoapi` |
 
 ## API Documentation
 
 ### Base URL
 ```
-http://localhost:3002/api
+http://localhost:3003/api
+https://todo-app-back-p4tg.onrender.com/api/
 ```
 
 ### Health Check
@@ -139,7 +147,7 @@ GET /api/tasks
       "description": "Description de la tâche",
       "status": "todo",
       "createdAt": "2024-01-15T10:30:00.000Z",
-      "updatedAt": "2024-01-15T10:30:00.000Z"
+      "updatedAt": "2024-01-15T10:35:00.000Z"
     }
   ]
 }
@@ -160,7 +168,7 @@ GET /api/tasks/:id
     "description": "Description de la tâche",
     "status": "todo",
     "createdAt": "2024-01-15T10:30:00.000Z",
-    "updatedAt": "2024-01-15T10:30:00.000Z"
+    "updatedAt": "2024-01-15T10:35:00.000Z"
   }
 }
 ```
@@ -208,7 +216,15 @@ Content-Type: application/json
 ```json
 {
   "result": true,
-  "message": "Tâche mise à jour !"
+  "message": "Tâche mise à jour !",
+  "task": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "title": "Tâche modifiée",
+    "description": "Nouvelle description",
+    "status": "in-progress",
+    "createdAt": "2024-01-15T10:30:00.000Z",
+    "updatedAt": "2024-01-15T10:40:00.000Z"
+  }
 }
 ```
 
@@ -255,27 +271,13 @@ L'application dispose d'une suite de tests complète comprenant :
 
 ```bash
 # Exécuter tous les tests
-npm run test
-```
-Resultat : 
-```bash
---------------|---------|----------|---------|---------|-------------------               
-File          | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                
---------------|---------|----------|---------|---------|-------------------
-All files     |     100 |      100 |     100 |     100 |                  
- src/config   |     100 |      100 |     100 |     100 |                  
-  database.js |     100 |      100 |     100 |     100 |                  
- src/models   |     100 |      100 |     100 |     100 |                  
-  task.js     |     100 |      100 |     100 |     100 |                  
- tests        |     100 |      100 |     100 |     100 |                  
-  sum.js      |     100 |      100 |     100 |     100 |                  
---------------|---------|----------|---------|---------|-------------------
+npm test
 
-Test Suites: 3 passed, 3 total
-Tests:       9 passed, 9 total
-Snapshots:   0 total
-Time:        0.946 s, estimated 1 s
-Ran all test suites.
+# Tests unitaires uniquement
+npm run test:unit
+
+# Tests d'intégration uniquement
+npm run test:integration
 ```
 
 ### Structure des Tests
@@ -288,13 +290,22 @@ Les tests couvrent :
 - Validation des données d'entrée
 - Endpoints de santé de l'API
 
+## CI/CD
+
+L'application utilise GitHub Actions pour l'intégration continue :
+
+- **Tests automatiques** sur push et pull request
+- **Build Docker** automatique
+- **Validation** de la qualité du code
+
 ## Technologies Utilisées
 
 - **Node.js** : Runtime JavaScript
 - **Express.js** : Framework web
-- **Sequelize** : ORM pour base de données
-- **MariaDB** : Base de données relationnelle
+- **Mongoose** : ODM pour MongoDB
+- **MongoDB** : Base de données NoSQL
 - **Docker** : Containerisation
 - **Helmet** : Sécurité HTTP
 - **CORS** : Gestion des origines croisées
 - **Jest** : Framework de tests
+- **GitHub Actions** : CI/CD
