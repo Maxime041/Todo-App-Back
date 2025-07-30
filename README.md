@@ -229,8 +229,8 @@ DELETE /api/tasks/:id
 ```javascript
 {
   id: "UUID",                    // Identifiant unique (auto-généré)
-  title: "string",               // Titre (optionnel)
-  description: "string",         // Description (obligatoire)
+  title: "string",               // Titre (obligatoire)
+  description: "string",         // Description (optionnel)
   status: "enum",                // Statut : 'todo', 'in-progress', 'done'
   createdAt: "timestamp",        // Date de création (auto)
   updatedAt: "timestamp"         // Date de modification (auto)
