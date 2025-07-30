@@ -261,7 +261,6 @@ npm run test
 - **Tests d'intégration** : Validation des endpoints API complets
 - **Health check** : Vérification de l'état de l'API
 
-### Coverage
 Les tests couvrent :
 - Création, lecture, modification et suppression des tâches
 - Validation des données d'entrée
