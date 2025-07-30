@@ -2,7 +2,7 @@ name: Node-CI Test
 
 on:
   push:
-    branches: [ "main", "staging", "dev" ]
+    branches: [ "main", "staging", "dev", "change_db" ]
   pull_request:
     branches: [ "main", "staging", "dev" ]
 
@@ -10,21 +10,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
+    env:
+      NODE_ENV: test
+      PORT: 3003
+      MONGODB_URI: mongodb://127.0.0.1:27017/todoapi
+      API_URL: http://localhost:3003
+    
     services:
-      mariadb:
-        image: mariadb:11
+      mongodb:
+        image: mongo:7
         env:
-          MYSQL_ROOT_PASSWORD: root_password
-          MYSQL_DATABASE: todo_app
-          MYSQL_USER: todo_user
-          MYSQL_PASSWORD: todo_password
+          MONGO_INITDB_DATABASE: todoapi
         ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="healthcheck.sh --connect --innodb_initialized"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+          - 27017:27017
     
     steps:
     - uses: actions/checkout@v4
@@ -37,21 +35,13 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Wait for MariaDB
+    - name: Wait for MongoDB
       run: |
-        while ! mysqladmin ping -h 127.0.0.1 -P 3306 --silent; do
-          echo 'Waiting for MariaDB...'
+        while ! nc -z 127.0.0.1 27017; do
+          echo 'Waiting for MongoDB...'
           sleep 2
         done
-        echo 'MariaDB is ready!'
-
-    - name: Setup environment variables
-      run: |
-        echo "NODE_ENV=test" >> $GITHUB_ENV
-        echo "DB_HOST=127.0.0.1" >> $GITHUB_ENV
-        echo "DB_NAME=todo_app" >> $GITHUB_ENV
-        echo "DB_USER=todo_user" >> $GITHUB_ENV
-        echo "DB_PASSWORD=todo_password" >> $GITHUB_ENV
+        echo 'MongoDB is ready!'
 
     - name: Start server in background
       run: |
