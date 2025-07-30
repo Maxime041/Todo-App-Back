@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/app.js",
-    "test": "npx jest --passWithNoTests"
+    "test": "npx jest --passWithNoTests --coverage"
   },
   "author": "",
   "license": "ISC",
