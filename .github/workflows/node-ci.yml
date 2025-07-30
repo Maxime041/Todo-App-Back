@@ -14,6 +14,7 @@ jobs:
       NODE_ENV: test
       PORT: 3003
       MONGODB_URI: mongodb://127.0.0.1:27017/todoapi
+      API_URL: http://localhost:3003
     
     services:
       mongodb:
