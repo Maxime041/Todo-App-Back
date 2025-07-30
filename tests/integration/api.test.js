@@ -2,6 +2,12 @@
 describe('API Integration Tests', () => {
   const API_URL = 'http://localhost:3002';
 
+    beforeAll(async () => {
+
+    server = await startServer();
+    await new Promise(resolve => setTimeout(resolve, 2000));
+  });
+
   describe('Health Check', () => {
     test("API at '/health' says ok", async () => {
       const promise = await fetch(`${API_URL}/health`);
