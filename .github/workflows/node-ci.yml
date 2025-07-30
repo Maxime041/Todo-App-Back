@@ -36,7 +36,7 @@ jobs:
 
     - name: Wait for MongoDB
       run: |
-        while ! mongosh --host 127.0.0.1 --port 27017 --eval "db.adminCommand('ping')" --quiet; do
+        while ! nc -z 127.0.0.1 27017; do
           echo 'Waiting for MongoDB...'
           sleep 2
         done
