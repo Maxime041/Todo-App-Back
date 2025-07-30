@@ -9,11 +9,19 @@ const Task = sequelize.define('Task', {
   },
   title: {
     type: DataTypes.STRING,
-    allowNull: true
+    allowNull: false,
+    validate: {
+      notNull: {
+        msg: 'Title is required'
+      },
+      notEmpty: {
+        msg: 'Title is required'
+      }
+    }
   },
   description: {
     type: DataTypes.TEXT,
-    allowNull: false
+    allowNull: true
   },
   status: {
     type: DataTypes.ENUM('todo', 'in-progress', 'done'),
