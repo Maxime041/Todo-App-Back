@@ -2,24 +2,25 @@ function errorHandler(err, req, res, next) {
   console.error(err.stack);
   
   if (err.name === 'ValidationError') {
+    const errors = Object.values(err.errors).map(e => e.message);
     return res.status(400).json({
       result: false,
       error: 'Données invalides',
-      details: err.message
+      details: errors
     });
   }
   
-  if (err.name === 'SequelizeUniqueConstraintError') {
+  if (err.code === 11000) {
     return res.status(409).json({
       result: false,
-      error: 'Conflit de données'
+      error: 'Conflit de données - Cette ressource existe déjà'
     });
   }
   
-  if (err.name === 'SequelizeDatabaseError') {
-    return res.status(500).json({
+  if (err.name === 'CastError') {
+    return res.status(400).json({
       result: false,
-      error: 'Erreur de base de données'
+      error: 'ID invalide'
     });
   }
   

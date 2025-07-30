@@ -1,36 +1,29 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');
 
-const Task = sequelize.define('Task', {
+const taskSchema = new mongoose.Schema({
   id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true
+    type: String,
+    default: uuidv4,
+    unique: true
   },
   title: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      notNull: {
-        msg: 'Title is required'
-      },
-      notEmpty: {
-        msg: 'Title is required'
-      }
-    }
+    type: String,
+    required: true,
+    trim: true
   },
   description: {
-    type: DataTypes.TEXT,
-    allowNull: true
+    type: String,
+    trim: true
   },
   status: {
-    type: DataTypes.ENUM('todo', 'in-progress', 'done'),
-    defaultValue: 'todo',
-    allowNull: false
+    type: String,
+    enum: ['todo', 'in-progress', 'done'],
+    default: 'todo'
   }
 }, {
-  timestamps: true,
-  tableName: 'tasks'
+  timestamps: true
 });
 
-module.exports = Task;
+
+module.exports = mongoose.model('Task', taskSchema);

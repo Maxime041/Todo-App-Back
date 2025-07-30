@@ -1,7 +1,8 @@
+//api.test.js
+require('dotenv').config();
 
 describe('API Integration Tests', () => {
-  const API_URL = 'http://localhost:3002';
-
+  const API_URL = process.env.API_URL;
 
   describe('Health Check', () => {
     test("API at '/health' says ok", async () => {
@@ -116,7 +117,12 @@ describe('API Integration Tests', () => {
       console.log(data);
       expect(data).toMatchObject({
         result: true,
-        message: "Tâche mise à jour !"
+        message: "Tâche mise à jour !",
+        task: expect.objectContaining({
+          title: updateData.title,
+          description: updateData.description,
+          status: updateData.status
+        })
       });
     });
 
@@ -145,6 +151,19 @@ describe('API Integration Tests', () => {
       expect(data).toMatchObject({
         result: true,
         message: "Tâche supprimée !"
+      });
+    });
+
+    test("GET '/api/tasks/:id' returns error for non-existent task", async () => {
+      const fakeId = '123e4567-e89b-12d3-a456-426614174000';
+      
+      const promise = await fetch(`${API_URL}/api/tasks/${fakeId}`);
+      const data = await promise.json();
+      
+      console.log(data);
+      expect(data).toMatchObject({
+        result: false,
+        error: "Tâche non trouvée"
       });
     });
   });

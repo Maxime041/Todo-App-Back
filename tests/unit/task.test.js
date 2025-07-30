@@ -9,7 +9,7 @@ describe('Task Model', () => {
         description: 'Test description'
       };
 
-      const task = Task.build(taskData);
+      const task = new Task(taskData);
 
       expect(task.title).toBe(taskData.title);
       expect(task.description).toBe(taskData.description);
@@ -18,9 +18,9 @@ describe('Task Model', () => {
     });
 
     it('should throw error without title', async () => {
-      const task = Task.build({});
+      const task = new Task({});
       
-      await expect(task.validate()).rejects.toThrow('Title is required');
+      await expect(task.validate()).rejects.toThrow('Task validation failed: title: Path `title` is required.');
     });
   });
 });
