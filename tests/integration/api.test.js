@@ -2,12 +2,6 @@
 describe('API Integration Tests', () => {
   const API_URL = 'http://localhost:3002';
 
-    beforeAll(async () => {
-
-    server = require('../src/app'); // Import the server
-    await new Promise(resolve => server.listen(3002, resolve)); // Start the server
-
-  });
 
   describe('Health Check', () => {
     test("API at '/health' says ok", async () => {
