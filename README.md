@@ -255,6 +255,26 @@ L'application dispose d'une suite de tests complète comprenant :
 # Exécuter tous les tests
 npm run test
 ```
+Resultat : 
+```bash
+--------------|---------|----------|---------|---------|-------------------               
+File          | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                
+--------------|---------|----------|---------|---------|-------------------
+All files     |     100 |      100 |     100 |     100 |                  
+ src/config   |     100 |      100 |     100 |     100 |                  
+  database.js |     100 |      100 |     100 |     100 |                  
+ src/models   |     100 |      100 |     100 |     100 |                  
+  task.js     |     100 |      100 |     100 |     100 |                  
+ tests        |     100 |      100 |     100 |     100 |                  
+  sum.js      |     100 |      100 |     100 |     100 |                  
+--------------|---------|----------|---------|---------|-------------------
+
+Test Suites: 3 passed, 3 total
+Tests:       9 passed, 9 total
+Snapshots:   0 total
+Time:        0.946 s, estimated 1 s
+Ran all test suites.
+```
 
 ### Structure des Tests
 - **Tests unitaires** : Validation des modèles et fonctions isolées
