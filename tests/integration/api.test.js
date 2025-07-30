@@ -4,8 +4,9 @@ describe('API Integration Tests', () => {
 
     beforeAll(async () => {
 
-    server = await startServer();
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    server = require('../src/app'); // Import the server
+    await new Promise(resolve => server.listen(3002, resolve)); // Start the server
+
   });
 
   describe('Health Check', () => {
