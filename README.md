@@ -25,9 +25,11 @@ todo-api/
 │   ├── middleware/
 │   │   └── errorHandler.js      # Gestionnaire d'erreurs global
 │   └── app.js                   # Point d'entrée de l'application
-├── tests/                       # Tests (à développer en partie 2)
+├── tests/                       # Tests unitaires et d'intégration
 │   ├── unit/
+│   │   └── task.test.js         # Tests unitaires du modèle Task
 │   └── integration/
+│       └── api.test.js          # Tests d'intégration API
 ├── Dockerfile                   # Configuration Docker
 ├── docker-compose.yml           # Orchestration des services
 ├── package.json                 # Dépendances Node.js
@@ -77,8 +79,7 @@ todo-api/
 
 2. **Configurer les variables d'environnement**
    ```bash
-   crée le fichier .env
-   # Éditer .env avec vos paramètres
+   # Créer le fichier .env
    ```
 
 3. **Démarrer l'application**
@@ -246,10 +247,25 @@ DELETE /api/tasks/:id
 | 409 | Conflit de données |
 | 500 | Erreur serveur |
 
-
 ## Tests
 
-Les tests seront développés dans la partie 2 du cours.
+L'application dispose d'une suite de tests complète comprenant :
+
+```bash
+# Exécuter tous les tests
+npm run test
+```
+
+### Structure des Tests
+- **Tests unitaires** : Validation des modèles et fonctions isolées
+- **Tests d'intégration** : Validation des endpoints API complets
+- **Health check** : Vérification de l'état de l'API
+
+### Coverage
+Les tests couvrent :
+- Création, lecture, modification et suppression des tâches
+- Validation des données d'entrée
+- Endpoints de santé de l'API
 
 ## Technologies Utilisées
 
@@ -260,4 +276,4 @@ Les tests seront développés dans la partie 2 du cours.
 - **Docker** : Containerisation
 - **Helmet** : Sécurité HTTP
 - **CORS** : Gestion des origines croisées
-
+- **Jest** : Framework de tests
