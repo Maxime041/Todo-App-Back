@@ -1,40 +1,13 @@
-version: '3.8'
-
 services:
   api:
     build: .
     ports:
-      - "3002:3002"
+      - "3003:3003"
     environment:
       - NODE_ENV=production
-      - DB_HOST=mariadb
-      - DB_NAME=todo_app
-      - DB_USER=todo_user
-      - DB_PASSWORD=todo_password
-    depends_on:
-      mariadb:
-        condition: service_healthy
+      - PORT=${PORT}
+      - MONGODB_URI=${MONGODB_URI}
     volumes:
       - .:/app
       - /app/node_modules
     restart: unless-stopped
-
-  mariadb:
-    image: mariadb:11
-    environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: todo_app
-      MYSQL_USER: todo_user
-      MYSQL_PASSWORD: todo_password
-    volumes:
-      - mariadb_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
-      start_period: 10s
-      interval: 10s
-      timeout: 5s
-      retries: 3
-    restart: unless-stopped
-
-volumes:
-  mariadb_data:
