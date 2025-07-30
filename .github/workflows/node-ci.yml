@@ -6,10 +6,25 @@ on:
   pull_request:
     branches: [ "main", "staging", "dev" ]
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    services:
+      mariadb:
+        image: mariadb:11
+        env:
+          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_DATABASE: todo_app
+          MYSQL_USER: todo_user
+          MYSQL_PASSWORD: todo_password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
     
     steps:
     - uses: actions/checkout@v4
@@ -22,10 +37,26 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    - name: Wait for MariaDB
+      run: |
+        while ! mysqladmin ping -h 127.0.0.1 -P 3306 --silent; do
+          echo 'Waiting for MariaDB...'
+          sleep 2
+        done
+        echo 'MariaDB is ready!'
+
+    - name: Setup environment variables
+      run: |
+        echo "NODE_ENV=test" >> $GITHUB_ENV
+        echo "DB_HOST=127.0.0.1" >> $GITHUB_ENV
+        echo "DB_NAME=todo_app" >> $GITHUB_ENV
+        echo "DB_USER=todo_user" >> $GITHUB_ENV
+        echo "DB_PASSWORD=todo_password" >> $GITHUB_ENV
+
     - name: Start server in background
       run: |
         nohup npm run start &   
-        sleep 5                 
+        sleep 10
     
     - name: Run tests
       run: npm test
